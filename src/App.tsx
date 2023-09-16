@@ -1,12 +1,13 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import Home from "./components/pages/Home";
-import LoadingScreen from "./components/pages/LoadingScreen";
-import RegisterPage from "./components/pages/RegisterPage";
-import LoginPage from "./components/pages/LoginPage";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import MissingPage from "./components/pages/MissingPage";
+import Home from "./adapters/pages/HomePage";
+import LoadingScreen from "./adapters/pages/LoadingPage";
+import RegisterPage from "./adapters/pages/RegisterPage";
+import LoginPage from "./adapters/pages/LoginPage";
+import { ProtectedRoute } from "./adapters/components/ProtectedRoute";
+import MissingPage from "./adapters/pages/MissingPage";
+import SignUpPage from "./adapters/pages/SignUpPage";
 
 const App: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -23,7 +24,7 @@ const App: React.FC = () => {
       <Route
         path="/register"
         element={
-          isAuthenticated ? <Navigate to="/" replace /> : <RegisterPage />
+          isAuthenticated ? <Navigate to="/" replace /> : <SignUpPage />
         }
       />
       <Route

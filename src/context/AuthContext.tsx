@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
       if (response.data.authenticated) {
         setIsAuthenticated(true);
+        console.log("auth success")
       } else {
         setIsAuthenticated(false);
       }

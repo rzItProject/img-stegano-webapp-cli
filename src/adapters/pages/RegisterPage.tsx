@@ -1,11 +1,11 @@
-import loginImg from "../../assets/images/img-1.jpg";
+
 import { ChangeEvent, FormEvent, useState } from "react";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ToastContainer, toast } from "react-toastify";
-import { cn } from "../../lib/Utils";
+import { cn } from "../../lib/utils";
 import { fr } from "date-fns/locale";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,7 +13,7 @@ import { Lock, User, User2 } from "lucide-react";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 //shacdn ui component
-import { Button } from "../ui/button";
+import { Button } from "../components/ui/button";
 import { format } from "date-fns";
 import {
   Card,
@@ -22,32 +22,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Calendar } from "../ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { Calendar } from "../components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../components/ui/popover";
+import { ApiError, FormErrors } from "../../core/models/Auth";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const REGISTER_URL = "http://localhost:8888/auth/register";
-
-// Types
-interface FormData {
-  username: string;
-  password: string;
-}
-
-interface FormErrors {
-  username?: string;
-  password?: string;
-}
-
-// Typage de l'erreur attendue de l'API
-interface ApiError {
-  detail: string;
-}
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -188,13 +173,14 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-9 h-screen w-screen bg-slate-800 overflow-hidden">
+    <div className="grid grid-cols-1 xl:grid-cols-9 h-screen w-screen bg-slate-950 overflow-hidden">
       <div className="relative hidden sm:block xl:block xl:col-span-5">
         <img
-          className="w-full h-full object-cover rounded-tl rounded-bl hidden xl:block"
-          src={loginImg}
+          className="w-full h-screen object-cover rounded-tl rounded-bl hidden xl:block"
+          src="assets/images/img-3.jpg"
           alt=""
         />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent to-slate-950"></div>
         <h1
           className="absolute hidden top-0 left-0 bg-opacity-90
          bg-slate-100 text-slate-900 text-2xl font-barcelony p-4 ml-4 mt-4 rounded-3xl
@@ -300,7 +286,7 @@ export default function RegisterPage() {
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {date ? (
-                            format(date, "PPP")
+                            format(date, "")
                           ) : (
                             <span>Choisir une date</span>
                           )}
@@ -580,6 +566,18 @@ export default function RegisterPage() {
             </p>
           </div>
         </form>  */}
+
+                    {/*  <p className="px-6 text-center text-sm text-muted-foreground">
+              En créant un compte, vous acceptez nos{" "}
+              <span className="underline underline-offset-3 hover:text-primary cursor-pointer">
+                Conditions d'utilisation'
+              </span>{" "}
+              et vous confirmez avoir lu notre{" "}
+              <span className="underline underline-offset-3 hover:text-primary cursor-pointer">
+                Politique de Confidentialité
+              </span>
+              .
+            </p> */}
       </div>
     </div>
   );
