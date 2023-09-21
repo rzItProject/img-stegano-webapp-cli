@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { IRegisterRepository } from "../../ports/IAuthRepositories";
 import { RegisterSchema } from "../models/Auth";
 import PasswordService from "./../services/PasswordService";
@@ -36,9 +36,14 @@ export class RegisterUseCase {
   async execute(user_data: RegisterSchema): Promise<AxiosResponse> {
     try {
       return await this.registerRepository.register(user_data);
-  } catch (error) {
-      console.error(`Error in execute method of UseCase: ${error}`);
-      throw new Error();
+  } catch (error:any) {
+    if (axios.isAxiosError(error)) {  // Vérifiez si c'est une erreur Axios
+      console.error(`Status Code: ${error.response?.status}`);
+      console.error(`Data: ${JSON.stringify(error.response?.data)}`);
+    } else {
+      console.error(`An unknown error occurred: ${error}`);
+    }
+    throw new Error();
   }
   }
 }

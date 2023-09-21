@@ -59,7 +59,7 @@ const SignUpForm: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [birth, setBirth] = useState("");
+  const [birthdate, setBirthdate] = useState("");
   const [gender, setGender] = useState("");
 
   // default value datepicker
@@ -133,27 +133,31 @@ const SignUpForm: FC = () => {
   const handleBirthChange = (event: Date | undefined) => {
     setDate(event);
     const formattedDate = formatDate(event);
-    setBirth(formattedDate);
+    setBirthdate(formattedDate);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    //setIsLoading(true);
+    setIsLoading(true);
     const name = firstname + " " + lastname;
     const user_data: RegisterSchema = {
       name,
       username,
       email,
       password,
-      birth,
+      birthdate,
       gender,
     };
     console.log(user_data);
 
     const res = registerUseCase.validatePassword(password);
+    console.log(res);
     if (res && res.length > 0) {
       setPasswordError(res);
-    } else {
+      for (const element of passwordError) {
+        toast.error(element);
+      }
+      setIsLoading(false);
       return;
     }
 
@@ -163,11 +167,11 @@ const SignUpForm: FC = () => {
       console.log(JSON.stringify(response.data));
       // add successfully notif
       setIsLoading(false);
-      toast.success(JSON.stringify(response.data.message));
+      toast.success("Inscription réussi");
       // reload page after success login
       setTimeout(() => {
         setIsLoading(false);
-        window.location.reload();
+        navigate("/login");
       }, 1000);
     } catch (error) {
       if (error instanceof Error) {
@@ -186,11 +190,13 @@ const SignUpForm: FC = () => {
             toast.error(
               "Une erreur inattendue s'est produite. Veuillez réessayer."
             );
+            setIsLoading(false);
         }
       } else {
         toast.error(
           "Une erreur inattendue s'est produite. Veuillez réessayer."
         );
+        setIsLoading(false);
       }
       setAttemptedLogin(false);
     }
@@ -259,11 +265,11 @@ const SignUpForm: FC = () => {
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
                   />
-                  {passwordError.map((error, index) => (
+                  {/* {passwordError.map((error, index) => (
                     <div key={index} className="text-red-500">
                       {error}
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </CardContent>
               <CardFooter>

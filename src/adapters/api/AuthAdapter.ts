@@ -42,7 +42,7 @@ class AuthAdapter
         username: user_data.username,
         email: user_data.email,
         password: user_data.password,
-        birth: user_data.birth,
+        birthdate: user_data.birthdate,
         gender: user_data.gender,
       }),
       {

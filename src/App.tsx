@@ -4,7 +4,6 @@ import { useAuth } from "./context/AuthContext";
 import NavBar from "./adapters/components/main/NavBar";
 import Home from "./adapters/pages/HomePage";
 import LoadingScreen from "./adapters/pages/LoadingPage";
-import RegisterPage from "./adapters/pages/RegisterPage";
 import LoginPage from "./adapters/pages/LoginPage";
 import { ProtectedRoute } from "./adapters/components/ProtectedRoute";
 import MissingPage from "./adapters/pages/MissingPage";

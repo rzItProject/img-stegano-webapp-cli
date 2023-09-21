@@ -8,7 +8,7 @@ export type RegisterSchema = {
   username: string;
   email: string;
   password: string;
-  birth: string;
+  birthdate: string;
   gender: string;
 };
 
