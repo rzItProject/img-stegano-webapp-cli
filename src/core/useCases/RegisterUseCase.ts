@@ -34,6 +34,11 @@ export class RegisterUseCase {
   }
 
   async execute(user_data: RegisterSchema): Promise<AxiosResponse> {
-    return this.registerRepository.register(user_data);
+    try {
+      return await this.registerRepository.register(user_data);
+  } catch (error) {
+      console.error(`Error in execute method of UseCase: ${error}`);
+      throw new Error();
+  }
   }
 }

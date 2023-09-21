@@ -5,13 +5,12 @@ import {
   IRegisterRepository,
   ICheckAuthRepository,
 } from "../../ports/IAuthRepositories";
-import { User } from "../../core/models/User";
 import { LoginSchema, RegisterSchema } from "../../core/models/Auth";
 
 const LOGIN_URL = "http://localhost:8888/auth/login";
 const LOGOUT_URL = "http://localhost:8888/auth/logout";
 const REGISTER_URL = "http://localhost:8888/auth/register";
-const CHECKAUTH_URL = "http://localhost:8888/auth/check-auth";
+const CHECKAUTH_URL = "http://localhost:8888/auth/check_status";
 
 class AuthAdapter
   implements
@@ -47,19 +46,26 @@ class AuthAdapter
         gender: user_data.gender,
       }),
       {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response;
   }
 
-  async logout(): Promise<void> {
-    await axios.post(LOGOUT_URL);
+  async logout(): Promise<AxiosResponse> {
+    return await axios.post(LOGOUT_URL, null, {
+      withCredentials: true,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  async isAuthenticated(): Promise<boolean> {
-    const response = await axios.get(CHECKAUTH_URL);
-    return response.data.isAuthenticated;
+  async checkAuthStatus(): Promise<AxiosResponse> {
+    const response = await axios.get(CHECKAUTH_URL, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+
+    return response;
   }
 }
 

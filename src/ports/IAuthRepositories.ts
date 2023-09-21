@@ -11,9 +11,9 @@ export interface IRegisterRepository {
 }
 
 export interface ILogoutRepository {
-  logout: () => Promise<void>;
+  logout: () => Promise<AxiosResponse>;
 }
 
 export interface ICheckAuthRepository {
-  isAuthenticated: () => Promise<boolean>;
+  checkAuthStatus: () => Promise<AxiosResponse>;
 }

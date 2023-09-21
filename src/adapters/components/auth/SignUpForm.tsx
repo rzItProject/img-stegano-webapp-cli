@@ -163,7 +163,6 @@ const SignUpForm: FC = () => {
       console.log(JSON.stringify(response.data));
       // add successfully notif
       setIsLoading(false);
-      setAttemptedLogin(true);
       toast.success(JSON.stringify(response.data.message));
       // reload page after success login
       setTimeout(() => {

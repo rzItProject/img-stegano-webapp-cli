@@ -22,7 +22,7 @@ import {
 const LoginForm: FC = () => {
   const authAdapter = new AuthAdapter();
   const loginUseCase = new LoginUseCase(authAdapter);
-  const { isAuthenticated } = useAuth();
+  const { login } = useAuth();
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -35,12 +35,12 @@ const LoginForm: FC = () => {
   }>({});
   const [attemptedLogin, setAttemptedLogin] = useState(false);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (attemptedLogin && isAuthenticated) {
       //navigate("/", { replace: true });
       console.log("yessss");
     }
-  }, [attemptedLogin, isAuthenticated]);
+  }, [attemptedLogin, isAuthenticated]); */
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -58,17 +58,17 @@ const LoginForm: FC = () => {
     }
 
     try {
-      const response = await loginUseCase.execute(user_data);
-      console.log(response);
-      console.log(JSON.stringify(response.data));
       // add successfully notif
       //setIsLoading(false);
-      setAttemptedLogin(true);
-      toast.success(JSON.stringify(response.data.message));
+      // setAttemptedLogin(true);
       // reload page after success login
+      const response = await login(username, password);
+      toast.success(JSON.stringify(response?.data.message));
+
       setTimeout(() => {
         //setIsLoading(false);
-        window.location.reload();
+        
+        navigate('/');
       }, 1000);
     } catch (error) {
       if (error instanceof Error) {
@@ -114,7 +114,6 @@ const LoginForm: FC = () => {
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
-              
             />
             {errors.username && (
               <p style={{ color: "red" }}>{errors.username}</p>
@@ -130,7 +129,6 @@ const LoginForm: FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               //onChange={(e) => handleChange(e)}
               disabled={isLoading}
-              
             />
             {errors.password && (
               <p style={{ color: "red" }}>{errors.password}</p>
