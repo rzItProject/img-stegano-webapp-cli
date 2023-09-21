@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect, FC } from "react";
 import { Icons } from "../ui/icons";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -13,34 +13,29 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../../context/AuthContext";
 import { LoginUseCase } from "../../../core/useCases/LoginUseCase";
+import { ErrorField } from "../../../core/models/Auth";
+import {
+  validatePassword,
+  validateUsername,
+} from "../../../core/services/validation";
 
-const LoginForm: React.FC = () => {
+const LoginForm: FC = () => {
   const authAdapter = new AuthAdapter();
   const loginUseCase = new LoginUseCase(authAdapter);
   const { isAuthenticated } = useAuth();
 
-  const userRef = React.useRef<HTMLInputElement>(null);
-  const errRef = React.useRef<HTMLInputElement>(null);
-
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [errors, setErrors] = React.useState<string>();
-  const [attemptedLogin, setAttemptedLogin] = React.useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<{
+    username?: string;
+    password?: string;
+  }>({});
+  const [attemptedLogin, setAttemptedLogin] = useState(false);
 
-  React.useEffect(() => {
-    if (userRef.current) {
-      userRef.current.focus();
-    }
-  }, []);
-
-  React.useEffect(() => {
-    setErrors("");
-  }, [username, password]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (attemptedLogin && isAuthenticated) {
       //navigate("/", { replace: true });
       console.log("yessss");
@@ -51,17 +46,28 @@ const LoginForm: React.FC = () => {
     event.preventDefault();
     setIsLoading(true);
     const user_data = { username, password };
+    console.log(loginUseCase.checkUserFields(user_data));
+
+    // Validation
+    const usernameError = validateUsername(username);
+    const passwordError = validatePassword(password);
+
+    if (usernameError || passwordError) {
+      setErrors({ username: usernameError, password: passwordError });
+      return;
+    }
+
     try {
       const response = await loginUseCase.execute(user_data);
       console.log(response);
       console.log(JSON.stringify(response.data));
       // add successfully notif
-      setIsLoading(false);
+      //setIsLoading(false);
       setAttemptedLogin(true);
       toast.success(JSON.stringify(response.data.message));
       // reload page after success login
       setTimeout(() => {
-        setIsLoading(false);
+        //setIsLoading(false);
         window.location.reload();
       }, 1000);
     } catch (error) {
@@ -108,9 +114,11 @@ const LoginForm: React.FC = () => {
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
-              required
-              ref={userRef}
+              
             />
+            {errors.username && (
+              <p style={{ color: "red" }}>{errors.username}</p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Mot de passe</Label>
@@ -122,9 +130,11 @@ const LoginForm: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               //onChange={(e) => handleChange(e)}
               disabled={isLoading}
-              required
-              ref={userRef}
+              
             />
+            {errors.password && (
+              <p style={{ color: "red" }}>{errors.password}</p>
+            )}
           </div>
           <Button className="mt-2" disabled={isLoading}>
             {isLoading && (

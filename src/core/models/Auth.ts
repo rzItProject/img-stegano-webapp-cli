@@ -17,6 +17,12 @@ export type FormErrors = {
   password?: string;
 };
 
+
+export type ErrorField = {
+  password: string[];
+  email: string[];
+};
+
 // Typage de l'erreur attendue de l'API
 export type ApiError = {
   detail: string;

@@ -1,10 +1,24 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { ILoginRepository } from "../../ports/IAuthRepositories";
 import { User } from "../models/User";
-import { LoginSchema } from "../models/Auth";
+import { ErrorField, LoginSchema } from "../models/Auth";
+import EmailService from './../services/EmailService';
 
 export class LoginUseCase {
   constructor(private loginRepository: ILoginRepository) {}
+
+  /* checkUserFields(user_data: LoginSchema): ErrorField {
+    const username: string[] = []
+    const email: string[] = [];
+    if(this.emailService.)
+
+  } */
+
+  checkUserFields(user_data: LoginSchema){
+    return Object.entries(user_data).every(([key, value]) => {
+      return value.trim().length > 0;
+    });
+  }
 
   async execute(user_data: LoginSchema): Promise<AxiosResponse> {
     try {

@@ -23,7 +23,7 @@ import { format } from "date-fns";
 
 const RegisterForm: FC = () => {
   const authAdapter = new AuthAdapter();
-  const registerUseCase = new RegisterUseCase(authAdapter);
+  //const registerUseCase = new RegisterUseCase(authAdapter);
   const { isAuthenticated } = useAuth();
 
   const userRef = useRef<HTMLInputElement>(null);
@@ -123,7 +123,7 @@ const RegisterForm: FC = () => {
       birth,
       gender,
     };
-    try {
+    /* try {
       const response = await registerUseCase.execute(user_data);
       console.log(response);
       console.log(JSON.stringify(response.data));
@@ -160,7 +160,7 @@ const RegisterForm: FC = () => {
         );
       }
       setAttemptedLogin(false);
-    }
+    } */
   };
 
   return (
